@@ -3,35 +3,58 @@ const fs = require("fs");
 console.log("START");
 
 // 读取 input.txt
-let input = fs.readFileSync("input.txt", "utf-8")
-    .split("\n")
-    .map(i => i.trim())
-    .filter(Boolean);
+let input = [];
 
-// posts
-let posts = [];
-if (fs.existsSync("posts.json")) {
-    posts = JSON.parse(fs.readFileSync("posts.json", "utf-8"));
+if (fs.existsSync("input.txt")) {
+    input = fs.readFileSync("input.txt", "utf-8")
+        .split("\n")
+        .map(i => i.trim())
+        .filter(Boolean);
 }
 
+// 读取 posts.json
+let posts = [];
+
+if (fs.existsSync("posts.json")) {
+    try {
+        posts = JSON.parse(fs.readFileSync("posts.json", "utf-8"));
+    } catch (e) {
+        console.log("posts.json parse error");
+        posts = [];
+    }
+}
+
+// 去重
 let seen = new Set(posts.map(p => p.url));
 
 function generateDesc(title) {
-    return `${title}，最新教程与资源整理。`;
+    return `${title}，最新资源与教程整理。`;
 }
 
+// 主循环
 for (let line of input) {
 
-    // 分割 标题 | 链接
-    const parts = line.split("|");
+    // 必须包含 |
+    if (!line.includes("|")) {
+        console.log("skip invalid line:", line);
+        continue;
+    }
 
-    if (parts.length < 2) continue;
+    let parts = line.split("|");
 
-    const title = parts[0].trim();
-    const url = parts[1].trim();
+    // 防止 undefined
+    let title = parts[0] ? parts[0].trim() : "";
+    let url = parts[1] ? parts[1].trim() : "";
 
+    // 空值跳过
+    if (!title || !url) {
+        console.log("skip empty:", line);
+        continue;
+    }
+
+    // 已存在
     if (seen.has(url)) {
-        console.log("skip:", url);
+        console.log("skip duplicate:", url);
         continue;
     }
 
