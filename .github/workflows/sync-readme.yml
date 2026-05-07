@@ -1,4 +1,4 @@
-name: Full Auto Pipeline
+name: Auto System
 
 on:
   push:
@@ -19,28 +19,17 @@ jobs:
         with:
           node-version: 20
 
-      # 1️⃣ 生成 posts.json（关键）
-      - name: Generate posts.json
+      - name: Run generator
         run: node ai-generate.js
 
-      - name: Commit posts.json
+      - name: Commit changes
         run: |
           git config user.name "auto-bot"
           git config user.email "bot@example.com"
-          git add posts.json
-          git diff --cached --quiet && echo "no posts change" && exit 0
-          git commit -m "update posts"
-          git push
 
-      # 2️⃣ 生成 README
-      - name: Generate README
-        run: node generate-readme.js
+          git add posts.json README.md
 
-      - name: Commit README
-        run: |
-          git config user.name "auto-bot"
-          git config user.email "bot@example.com"
-          git add README.md
           git diff --cached --quiet && exit 0
-          git commit -m "update readme"
+
+          git commit -m "auto update"
           git push
