@@ -18,4 +18,4 @@
 
 ## 入口页
 
-https://kejimao.github.io/latest-links/
+https://kejimao.github.io/latest-links/latest.html
