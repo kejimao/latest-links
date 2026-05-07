@@ -13,7 +13,6 @@
 - https://justpaste.it/best-youtube-video-downloader
 - https://rentry.co/youtube-video-downloader
 - https://rentry.co/how-to-download-youtube-videos
-- https://justpaste.it/best-youtube-video-downloader
 - https://kejimao.github.io/youtube-video-download-guide-2026/
 
 ## 入口页
