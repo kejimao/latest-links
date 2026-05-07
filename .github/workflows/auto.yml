@@ -1,9 +1,7 @@
-name: Auto AI Generate Posts
+name: Auto Generate Posts
 
 on:
   push:
-    branches:
-      - main
     paths:
       - input.txt
 
@@ -12,25 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 拉取代码
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      # 2. 安装 Node.js
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      # 3. 运行 AI 脚本
-      - name: Run AI generator
+      - name: Install dependencies
+        run: npm install node-fetch
+
+      - name: Run AI script
         run: node ai-generate.js
 
-      # 4. 提交 posts.json 回仓库
       - name: Commit changes
         run: |
           git config --global user.name "auto-bot"
           git config --global user.email "bot@example.com"
           git add posts.json
-          git commit -m "auto update posts.json" || exit 0
+          git commit -m "auto update" || exit 0
           git push
