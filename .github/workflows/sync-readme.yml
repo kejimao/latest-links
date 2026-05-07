@@ -1,35 +1,46 @@
-const fs = require("fs");
+name: Full Auto Pipeline
 
-let posts = [];
+on:
+  push:
+    branches:
+      - main
 
-try {
-    if (fs.existsSync("posts.json")) {
-        posts = JSON.parse(fs.readFileSync("posts.json", "utf-8"));
-    }
-} catch (e) {
-    console.log("JSON ERROR:", e.message);
-    posts = [];
-}
+permissions:
+  contents: write
 
-if (!Array.isArray(posts)) posts = [];
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-posts = posts.slice(0, 30);
+    steps:
+      - uses: actions/checkout@v4
 
-let md = "# 🔥 最新资源合集（自动更新）\n\n";
-md += "> 自动生成，无需手动维护\n\n";
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-if (posts.length === 0) {
-    md += "⚠️ 暂无数据\n";
-} else {
-    posts.forEach((p, i) => {
-        md += `## ${i + 1}. ${p.title || "无标题"}\n`;
-        md += `- 📝 ${p.desc || "暂无描述"}\n`;
-        md += `- 🔗 ${p.url || ""}\n\n`;
-    });
-}
+      # 1️⃣ 生成 posts.json（关键）
+      - name: Generate posts.json
+        run: node ai-generate.js
 
-md += "\n---\n";
-md += "👉 latest: https://kejimao.github.io/latest-links/latest.html\n";
+      - name: Commit posts.json
+        run: |
+          git config user.name "auto-bot"
+          git config user.email "bot@example.com"
+          git add posts.json
+          git diff --cached --quiet && echo "no posts change" && exit 0
+          git commit -m "update posts"
+          git push
 
-fs.writeFileSync("README.md", md);
-console.log("README generated:", posts.length);
+      # 2️⃣ 生成 README
+      - name: Generate README
+        run: node generate-readme.js
+
+      - name: Commit README
+        run: |
+          git config user.name "auto-bot"
+          git config user.email "bot@example.com"
+          git add README.md
+          git diff --cached --quiet && exit 0
+          git commit -m "update readme"
+          git push
