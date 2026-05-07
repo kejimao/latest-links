@@ -64,5 +64,11 @@
     "desc": "4K Video Downloader最新教程",
     "url": "https://www.4kvideodownloader.com/tutorial/how-to-download-instagram-photo/",
     "category": "external"
-  }
+  },
+{
+  "title": "测试新增视频下载教程",
+  "desc": "用于测试系统是否正常更新",
+  "url": "https://example.com/test-video-download",
+  "category": "external"
+}
 ]
