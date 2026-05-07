@@ -1,73 +1,68 @@
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <title>最新资源合集｜视频下载工具与教程</title>
-    <meta name="description" content="持续更新视频下载工具、教程合集与外部资源，所有内容自动同步更新。">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-
 <body>
 
 <h1>🔥 最新资源合集</h1>
 
-<p>本页面持续更新视频下载工具、教程与实用资源，所有内容由数据文件自动生成。</p>
+<p>
+本页面持续更新视频下载工具、教程与实用资源，
+所有内容由 posts.json 自动生成。
+</p>
 
 <hr>
 
 <h2>📌 最新更新</h2>
-
-<div id="posts">加载中...</div>
+<div id="latest"></div>
 
 <hr>
 
 <h2>📁 GitHub 页面</h2>
-
-<ul>
-    <li><a href="https://kejimao.github.io/youtube-video-download-guide/">YouTube视频下载教程（4K/8K）</a></li>
-    <li><a href="https://kejimao.github.io/Pornhub-Video-Downloader/">视频下载工具</a></li>
-    <li><a href="https://github.com/kejimao/4k-video-downloader">4K Video Downloader</a></li>
-    <li><a href="https://github.com/kejimao/youtube-video-downloader">YouTube下载工具合集</a></li>
-</ul>
+<div id="github"></div>
 
 <hr>
 
 <h2>🌐 外部文章</h2>
-
-<ul>
-    <li><a href="https://www.4kvideodownloader.com/tutorial/how-to-download-4k-videos/">4K视频下载教程</a></li>
-    <li><a href="https://www.4kvideodownloader.com/tutorial/download-videos-from-youtube/">YouTube视频下载教程</a></li>
-    <li><a href="https://justpaste.it/download-yt-videos">YouTube下载完整指南</a></li>
-    <li><a href="https://justpaste.it/best-youtube-video-downloader">最佳视频下载工具推荐</a></li>
-    <li><a href="https://sites.google.com/view/bulk-download-yt-videos/guide">批量下载教程</a></li>
-    <li><a href="https://sites.google.com/view/pornhub-video-download/tutorial">视频下载教程合集</a></li>
-</ul>
+<div id="external"></div>
 
 <hr>
 
 <h2>📌 使用说明</h2>
 
 <p>
-所有内容由 <code>posts.json</code> 自动生成。<br>
-新增内容只需更新数据文件即可自动展示，无需修改页面结构。
+新增内容后，只需更新 input.txt，系统将自动同步更新页面。
 </p>
 
 <script>
-fetch("posts.json")
+fetch("posts.json?v=" + Date.now())
 .then(res => res.json())
 .then(data => {
-    const container = document.getElementById("posts");
 
-    container.innerHTML = data.map(item => `
-        <div style="margin-bottom:16px;">
+    const latest = document.getElementById("latest");
+    const github = document.getElementById("github");
+    const external = document.getElementById("external");
+
+    data.forEach(item => {
+
+        const html = `
+        <div style="margin-bottom:20px;">
             <a href="${item.url}" target="_blank">
                 <h3>${item.title}</h3>
             </a>
             <p>${item.desc}</p>
         </div>
-    `).join("");
+        `;
+
+        // 最新更新
+        latest.innerHTML += html;
+
+        // 分类
+        if (item.category === "github") {
+            github.innerHTML += html;
+        } else {
+            external.innerHTML += html;
+        }
+
+    });
+
 });
 </script>
 
 </body>
-</html>
