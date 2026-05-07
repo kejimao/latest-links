@@ -30,6 +30,6 @@
 
 ---
 
-## 📌 使用说明
+## 📌 资源入口
 
-新增内容只需修改：
+入口直达：https://kejimao.github.io/latest-links/latest.html
