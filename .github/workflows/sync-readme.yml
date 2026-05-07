@@ -1,73 +1,35 @@
-name: Auto Sync README
+const fs = require("fs");
 
-on:
-  push:
-    branches:
-      - main
+let posts = [];
 
-permissions:
-  contents: write
+try {
+    if (fs.existsSync("posts.json")) {
+        posts = JSON.parse(fs.readFileSync("posts.json", "utf-8"));
+    }
+} catch (e) {
+    console.log("JSON ERROR:", e.message);
+    posts = [];
+}
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+if (!Array.isArray(posts)) posts = [];
 
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+posts = posts.slice(0, 30);
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+let md = "# 🔥 最新资源合集（自动更新）\n\n";
+md += "> 自动生成，无需手动维护\n\n";
 
-      - name: Generate README.md safely
-        run: |
-          node -e "
-          const fs = require('fs');
+if (posts.length === 0) {
+    md += "⚠️ 暂无数据\n";
+} else {
+    posts.forEach((p, i) => {
+        md += `## ${i + 1}. ${p.title || "无标题"}\n`;
+        md += `- 📝 ${p.desc || "暂无描述"}\n`;
+        md += `- 🔗 ${p.url || ""}\n\n`;
+    });
+}
 
-          let posts = [];
+md += "\n---\n";
+md += "👉 latest: https://kejimao.github.io/latest-links/latest.html\n";
 
-          try {
-              if (fs.existsSync('posts.json')) {
-                  const raw = fs.readFileSync('posts.json','utf-8');
-                  posts = JSON.parse(raw || '[]');
-              }
-          } catch (e) {
-              posts = [];
-          }
-
-          if (!Array.isArray(posts)) posts = [];
-
-          posts = posts.slice(0, 30);
-
-          let md = '# 🔥 最新资源合集（自动更新）\n\n';
-          md += '> 自动同步 posts.json，无需手动维护\n\n';
-
-          if (posts.length === 0) {
-              md += '⚠️ 暂无数据，请检查 input.txt 是否已提交\n';
-          } else {
-              posts.forEach((p, i) => {
-                  md += `## ${i+1}. ${p.title || '无标题'}\n`;
-                  md += `- 📝 ${p.desc || '暂无描述'}\n`;
-                  md += `- 🔗 ${p.url || ''}\n\n`;
-              });
-          }
-
-          md += '\n---\n';
-          md += '👉 最新页面：https://kejimao.github.io/latest-links/latest.html\n';
-
-          fs.writeFileSync('README.md', md);
-          "
-
-      - name: Commit README (safe)
-        run: |
-          git config --global user.name "auto-bot"
-          git config --global user.email "bot@example.com"
-
-          git add README.md
-
-          git diff --cached --quiet && echo "no changes" && exit 0
-
-          git commit -m "auto update README"
-          git push
+fs.writeFileSync("README.md", md);
+console.log("README generated:", posts.length);
