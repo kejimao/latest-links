@@ -27,7 +27,8 @@
 <h2>📌 使用说明</h2>
 
 <p>
-新增内容后，只需更新 input.txt，系统将自动同步更新页面。
+新增内容后，只需更新 input.txt，
+系统将自动同步更新页面。
 </p>
 
 <script>
@@ -38,6 +39,10 @@ fetch("posts.json?v=" + Date.now())
     const latest = document.getElementById("latest");
     const github = document.getElementById("github");
     const external = document.getElementById("external");
+
+    latest.innerHTML = "";
+    github.innerHTML = "";
+    external.innerHTML = "";
 
     data.forEach(item => {
 
@@ -53,7 +58,7 @@ fetch("posts.json?v=" + Date.now())
         // 最新更新
         latest.innerHTML += html;
 
-        // 自动识别 github
+        // GitHub 分类
         if (
             item.url.includes("github.com") ||
             item.url.includes("github.io")
