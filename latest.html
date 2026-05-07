@@ -53,8 +53,11 @@ fetch("posts.json?v=" + Date.now())
         // 最新更新
         latest.innerHTML += html;
 
-        // 分类
-        if (item.category === "github") {
+        // 自动识别 github
+        if (
+            item.url.includes("github.com") ||
+            item.url.includes("github.io")
+        ) {
             github.innerHTML += html;
         } else {
             external.innerHTML += html;
