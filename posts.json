@@ -1,47 +1,5 @@
 [
   {
-    "title": "无法获取标题",
-    "desc": "自动生成内容",
-    "url": "https://test.com/第二轮测试",
-    "category": "external"
-  },
-  {
-    "title": "无法获取标题",
-    "desc": "自动生成内容",
-    "url": "https://www.4kvideodownloader.com/tutorial/download-4k-8k-videos/",
-    "category": "external"
-  },
-  {
-    "title": "无法获取标题",
-    "desc": "自动生成内容",
-    "url": "https://www.4kvideodownloader.com/tutorial/download-facebook-videos/",
-    "category": "external"
-  },
-  {
-    "title": "无法获取标题",
-    "desc": "自动生成内容",
-    "url": "https://www.4kvideodownloader.com/tutorial/download-youtube-videos/",
-    "category": "external"
-  },
-  {
-    "title": "无法获取标题",
-    "desc": "自动生成内容",
-    "url": "https://www.4kvideodownloader.com/tutorial/download-youtube-playlist/",
-    "category": "external"
-  },
-  {
-    "title": "无法获取标题",
-    "desc": "自动生成内容",
-    "url": "https://www.4kvideodownloader.com/tutorial/download-youtube-music/",
-    "category": "external"
-  },
-  {
-    "title": "无法获取标题",
-    "desc": "自动生成内容",
-    "url": "https://www.4kvideodownloader.com/tutorial/how-to-use-4k-video-downloader/",
-    "category": "external"
-  },
-  {
     "title": "YouTube视频下载教程｜4K/8K高清视频下载方法",
     "desc": "完整YouTube视频下载教程与4K/8K高清视频获取方法",
     "url": "https://kejimao.github.io/youtube-video-download-guide/",
@@ -107,10 +65,4 @@
     "url": "https://www.4kvideodownloader.com/tutorial/how-to-download-instagram-photo/",
     "category": "external"
   },
-  {
-    "title": "测试新增视频下载教程",
-    "desc": "用于测试系统是否正常更新",
-    "url": "https://example.com/test-video-download",
-    "category": "external"
-  }
 ]
