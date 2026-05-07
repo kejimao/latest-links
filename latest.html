@@ -46,52 +46,37 @@ https://kejimao.github.io/latest-links/latest.html
 </p>
 
 <script>
-
 fetch("posts.json?v=" + Date.now())
-
 .then(res => res.json())
-
 .then(data => {
 
     const latest = document.getElementById("latest");
 
     latest.innerHTML = "";
 
+    if (!Array.isArray(data)) {
+        latest.innerHTML = "数据格式错误";
+        return;
+    }
+
     data.forEach(item => {
 
         latest.innerHTML += `
-
-        <div style="margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid #ddd;">
-
-            <a href="${item.url}" target="_blank" style="text-decoration:none;">
-
-                <h3 style="margin-bottom:8px;">
-                    ${item.title}
-                </h3>
-
+        <div style="margin-bottom:24px; border-bottom:1px solid #eee; padding-bottom:10px;">
+            <a href="${item.url}" target="_blank">
+                <h3>${item.title}</h3>
             </a>
-
-            <p style="color:#555;">
-                ${item.desc}
-            </p>
-
+            <p>${item.desc}</p>
         </div>
-
         `;
 
     });
 
 })
-
-.catch(error => {
-
-    document.getElementById("latest").innerHTML =
-        "posts.json 加载失败";
-
-    console.error(error);
-
+.catch(err => {
+    document.getElementById("latest").innerHTML = "加载失败";
+    console.error(err);
 });
-
 </script>
 
 </body>
