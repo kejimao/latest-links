@@ -1,0 +1,41 @@
+name: Auto Sync README from posts.json
+
+on:
+  push:
+    paths:
+      - posts.json
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Generate README.md
+        run: |
+          node -e "
+          const fs = require('fs');
+
+          const posts = JSON.parse(fs.readFileSync('posts.json','utf-8'));
+
+          let md = '# 🔥 最新资源合集（自动更新）\n\n';
+          md += '> 本页面由 posts.json 自动生成，无需手动维护\n\n';
+
+          posts.forEach((p, i) => {
+              md += `## ${i+1}. ${p.title}\n`;
+              md += `- 📝 ${p.desc}\n`;
+              md += `- 🔗 ${p.url}\n\n`;
+          });
+
+          fs.writeFileSync('README.md', md);
+          "
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "auto-bot"
+          git config --global user.email "bot@example.com"
+          git add README.md
+          git commit -m "auto update README" || exit 0
+          git push
