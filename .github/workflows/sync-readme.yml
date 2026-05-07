@@ -1,4 +1,4 @@
-name: Auto System
+name: Auto Sync
 
 on:
   push:
@@ -13,23 +13,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # ✅ 必须有
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # 1️⃣ 生成数据
       - name: Run generator
         run: node ai-generate.js
 
-      - name: Commit changes
+      # 2️⃣ 强制提交（关键优化）
+      - name: Commit & Push
         run: |
           git config user.name "auto-bot"
           git config user.email "bot@example.com"
 
           git add posts.json README.md
 
-          git diff --cached --quiet && exit 0
+          # 🔥 强制 commit（不再 silently skip）
+          git commit -m "auto sync update" || echo "no changes"
 
-          git commit -m "auto update"
           git push
