@@ -1,4 +1,18 @@
-<body>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>最新资源合集｜视频下载工具与教程</title>
+
+    <meta name="description" content="持续更新视频下载工具、教程合集与外部资源，所有内容自动同步更新。">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<body style="max-width: 900px; margin: auto; padding: 20px; font-family: Arial; line-height: 1.7;">
 
 <h1>🔥 最新资源合集</h1>
 
@@ -10,17 +24,10 @@
 <hr>
 
 <h2>📌 最新更新</h2>
-<div id="latest"></div>
 
-<hr>
-
-<h2>📁 GitHub 页面</h2>
-<div id="github"></div>
-
-<hr>
-
-<h2>🌐 外部文章</h2>
-<div id="external"></div>
+<div id="latest">
+加载中...
+</div>
 
 <hr>
 
@@ -28,49 +35,64 @@
 
 <p>
 新增内容后，只需更新 input.txt，
-系统将自动同步更新页面。
+系统将自动同步更新页面，无需手动修改 HTML。
+</p>
+
+<p>
+最新页面：
+<a href="https://kejimao.github.io/latest-links/latest.html">
+https://kejimao.github.io/latest-links/latest.html
+</a>
 </p>
 
 <script>
+
 fetch("posts.json?v=" + Date.now())
+
 .then(res => res.json())
+
 .then(data => {
 
     const latest = document.getElementById("latest");
-    const github = document.getElementById("github");
-    const external = document.getElementById("external");
 
     latest.innerHTML = "";
-    github.innerHTML = "";
-    external.innerHTML = "";
 
     data.forEach(item => {
 
-        const html = `
-        <div style="margin-bottom:20px;">
-            <a href="${item.url}" target="_blank">
-                <h3>${item.title}</h3>
+        latest.innerHTML += `
+
+        <div style="margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid #ddd;">
+
+            <a href="${item.url}" target="_blank" style="text-decoration:none;">
+
+                <h3 style="margin-bottom:8px;">
+                    ${item.title}
+                </h3>
+
             </a>
-            <p>${item.desc}</p>
+
+            <p style="color:#555;">
+                ${item.desc}
+            </p>
+
         </div>
+
         `;
-
-        // 最新更新
-        latest.innerHTML += html;
-
-        // GitHub 分类
-        if (
-            item.url.includes("github.com") ||
-            item.url.includes("github.io")
-        ) {
-            github.innerHTML += html;
-        } else {
-            external.innerHTML += html;
-        }
 
     });
 
+})
+
+.catch(error => {
+
+    document.getElementById("latest").innerHTML =
+        "posts.json 加载失败";
+
+    console.error(error);
+
 });
+
 </script>
 
 </body>
+</html>
