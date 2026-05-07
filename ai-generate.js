@@ -1,4 +1,6 @@
 const fs = require("fs");
+const fetch = (...args) =>
+  import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 // 读取 input.txt
 let input = fs.readFileSync("input.txt", "utf-8")
@@ -6,18 +8,19 @@ let input = fs.readFileSync("input.txt", "utf-8")
     .map(i => i.trim())
     .filter(Boolean);
 
-// 读取已有 posts.json
+// 读取 posts.json
 let posts = [];
 if (fs.existsSync("posts.json")) {
     posts = JSON.parse(fs.readFileSync("posts.json", "utf-8"));
 }
 
-// 去重
 const exists = (url) => posts.some(p => p.url === url);
 
-// 🔥 抓网页真实 title / description
+// 抓取 meta
 async function fetchMeta(url) {
     try {
+        console.log("fetching:", url);
+
         const res = await fetch(url, {
             headers: {
                 "User-Agent": "Mozilla/5.0"
@@ -26,20 +29,17 @@ async function fetchMeta(url) {
 
         const html = await res.text();
 
-        // title
         let title = html.match(/<title>(.*?)<\/title>/i)?.[1] || "无标题";
 
-        // meta description
         let desc =
             html.match(/<meta\s+name=["']description["']\s+content=["'](.*?)["']/i)?.[1] ||
-            "";
-
-        // 如果没有 desc，用 title 兜底
-        if (!desc) desc = title;
+            title;
 
         return { title, desc };
 
     } catch (e) {
+        console.log("ERROR fetching:", url, e.message);
+
         return {
             title: "无法获取标题",
             desc: "自动生成内容"
@@ -54,26 +54,30 @@ function getCategory(url) {
     return "external";
 }
 
-// 主逻辑
 async function run() {
-    for (let url of input) {
-        if (exists(url)) continue;
+    console.log("input count:", input.length);
 
-        console.log("processing:", url);
+    for (let url of input) {
+        if (exists(url)) {
+            console.log("skip duplicate:", url);
+            continue;
+        }
 
         const meta = await fetchMeta(url);
 
         posts.unshift({
-            title: meta.title,   // ✅ 真实网页标题
-            desc: meta.desc,     // ✅ 真实描述
+            title: meta.title,
+            desc: meta.desc,
             url: url,
             category: getCategory(url)
         });
+
+        console.log("added:", meta.title);
     }
 
     fs.writeFileSync("posts.json", JSON.stringify(posts, null, 2));
 
-    console.log("done:", posts.length);
+    console.log("DONE posts:", posts.length);
 }
 
 run();
