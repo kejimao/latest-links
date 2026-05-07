@@ -2,8 +2,8 @@ name: Auto Generate Posts
 
 on:
   push:
-    paths:
-      - input.txt
+    branches:
+      - main
 
 jobs:
   build:
@@ -16,13 +16,10 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install dependencies
-        run: npm install node-fetch
-
-      - name: Run AI script
+      - name: Run script
         run: node ai-generate.js
 
-      - name: Commit changes
+      - name: Commit result
         run: |
           git config --global user.name "auto-bot"
           git config --global user.email "bot@example.com"
